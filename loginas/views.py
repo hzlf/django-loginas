@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import load_backend, login
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.shortcuts import redirect
 from django.utils.importlib import import_module
 from django.utils import six
@@ -48,8 +48,7 @@ def user_login(request, user_id):
         raise ImproperlyConfigured("The CAN_LOGIN_AS setting is neither a valid module nor callable.")
 
     if not can_login_as(request, user):
-        messages.error(request, "You do not have permission to do that.")
-        return redirect(request.META.get("HTTP_REFERER", "/"))
+        raise PermissionDenied("You are not allowed to login as a different user!")
 
     # Find a suitable backend.
     if not hasattr(user, 'backend'):
