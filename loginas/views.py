@@ -62,4 +62,4 @@ def user_login(request, user_id):
         messages.info(request, 'You are logged in as "%s" now.' % user.username)
         login(request, user)
 
-    return redirect("/")
+    return redirect(request.GET.get('next', '/'))
