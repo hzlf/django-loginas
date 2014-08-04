@@ -60,6 +60,7 @@ def user_login(request, user_id):
 
     # Log the user in.
     if hasattr(user, 'backend'):
+        messages.info(request, 'You are logged in as "%s" now.' % user.username)
         login(request, user)
 
     return redirect("/")
